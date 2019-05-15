@@ -306,6 +306,11 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 		contentType = types.ContentTypeYAML
 	}
 
+	fmt.Println("\n\nSTOP.")
+	text2 := ""
+	fmt.Scanln(&text2)
+	fmt.Println("Resuming...")
+
 	//	TODO: change these in a better format
 	req, err := http.NewRequest("POST", endPoint, bytes.NewBuffer(data))
 	req.Header.Set("Content-Type", contentType)
