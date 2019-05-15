@@ -7,6 +7,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/SunSince90/ASTRID-kube/utils"
+
 	"encoding/json"
 	"encoding/xml"
 
@@ -306,6 +308,8 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 		contentType = types.ContentTypeYAML
 	}
 
+	i.demoDropAll()
+
 	fmt.Println("\n\nSTOP.")
 	text2 := ""
 	fmt.Scanln(&text2)
@@ -324,4 +328,14 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 	defer resp.Body.Close()
 
 	fmt.Println("Sent infrastructure info and received", resp.Status)
+}
+
+func (i *InfrastructureInfoBuilder) demoDropAll() {
+	ips := []string{}
+
+	for _, instance := range i.deployedInstances {
+		ips = append(ips, instance.value)
+	}
+
+	utils.DemoFakeDropAll(ips)
 }
