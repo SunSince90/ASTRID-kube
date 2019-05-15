@@ -331,10 +331,10 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 }
 
 func (i *InfrastructureInfoBuilder) demoDropAll() {
-	ips := []string{}
+	ips := map[string]string{}
 
-	for _, instance := range i.deployedInstances {
-		ips = append(ips, instance.value)
+	for name, instance := range i.deployedInstances {
+		ips[instance.value] = name
 	}
 
 	utils.DemoFakeDropAll(ips)

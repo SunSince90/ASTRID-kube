@@ -80,7 +80,7 @@ func setAsync(ip string) bool {
 	return true
 }
 
-func DemoFakeDropAll(ips []string) {
+func DemoFakeDropAll(ips map[string]string) {
 	marshal := func(rule k8sfirewall.ChainRule) ([]byte, error) {
 		data, err := json.MarshalIndent(&rule, "", "   ")
 		if err != nil {
@@ -110,7 +110,7 @@ func DemoFakeDropAll(ips []string) {
 		}
 	}
 
-	apply := func(ip string) {
+	apply := func(ip, name string) {
 		endPoint := "http://" + ip + ":9000/polycube/v1/firewall/fw/chain/ingress/apply-rules/"
 		req, err := http.NewRequest("POST", endPoint, nil)
 		req.Header.Set("Content-Type", "application/json")
@@ -121,16 +121,16 @@ func DemoFakeDropAll(ips []string) {
 			log.Errorln("Error while trying to apply rules:", err)
 		}
 
-		log.Infoln("Applied drop all rule for", ip)
+		log.Infoln("Applied drop all rule in", name)
 	}
 
-	for _, currentIP := range ips {
-		for _, target := range ips {
+	for currentIP, currentName := range ips {
+		for target := range ips {
 			if currentIP != target {
 				push(currentIP, target)
 			}
 		}
 
-		apply(currentIP)
+		apply(currentIP, currentName)
 	}
 }
