@@ -155,7 +155,7 @@ func (handler *InfrastructureHandler) listen() {
 	<-handler.depBarrier
 	handler.log.Infoln("Found all deployments needed for this graph")
 
-	handler.log.Infoln("Going to start listening for pod life cycle events.")
+	handler.log.Infoln("Started listening for pod life cycle events...")
 	//	Start listening for pods
 	podInformer := informer.New(astrid_types.Pods, handler.name)
 	podInformer.AddEventHandler(func(obj interface{}) {
@@ -213,7 +213,7 @@ func (handler *InfrastructureHandler) handlePod(pod *core_v1.Pod) {
 	}
 
 	handler.log.Infoln("Detected running pod:", pod.Name)
-	time.AfterFunc(time.Second*5, func() {
+	time.AfterFunc(time.Second*10, func() {
 		handler.setupFirewall(pod, dep)
 	})
 }
@@ -224,30 +224,31 @@ func (handler *InfrastructureHandler) setupFirewall(pod *core_v1.Pod, dep *count
 	name := pod.Name
 	service := pod.Labels["astrid.io/service"]
 
-	time.AfterFunc(time.Second*10, func() {
-		if !utils.CreateFirewall(ip) {
-			return
-		}
-		handler.log.Infoln("Created firewall for pod:", name)
-		if !utils.AttachFirewall(ip) {
-			return
-		}
-		handler.log.Infoln("Attached firewall to pod:", name)
+	if !utils.CreateFirewall(ip) {
+		return
+	}
+	handler.log.Infoln("Created firewall for pod:", name)
 
-		//	TODO: look into name as uid
-		handler.infoBuilder.PushInstance(service, ip, name)
+	//	TODO: uncomment this when firewall is fixed
+	/*if !utils.AttachFirewall(ip) {
+		return
+	}
+	handler.log.Infoln("Attached firewall to pod:", name)*/
 
-		handler.lock.Lock()
-		defer handler.lock.Unlock()
+	//	TODO: look into name as uid
+	handler.infoBuilder.PushInstance(service, ip, name)
 
-		if handler.initialized {
-			return
-		}
-		dep.current++
-		if dep.current == dep.needed {
-			handler.canBuildInfo()
-		}
-	})
+	handler.lock.Lock()
+	defer handler.lock.Unlock()
+
+	if handler.initialized {
+		return
+	}
+	dep.current++
+	if dep.current == dep.needed {
+		handler.canBuildInfo()
+	}
+
 }
 
 func (handler *InfrastructureHandler) canBuildInfo() {

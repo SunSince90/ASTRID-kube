@@ -281,7 +281,7 @@ func (i *InfrastructureInfoBuilder) generate(to types.EncodingType) ([]byte, err
 		data, err = json()
 	}
 
-	log.Printf("# --- Infrastructure Info to send: --- #:\n%s\n\n# --- /Infrastructure Info to send --- #", string(data))
+	log.Printf("# --- Infrastructure Info to send: --- #:\n%s\n\n# --- /Infrastructure Info to send --- #\n\n", string(data))
 	return data, nil
 }
 
@@ -308,9 +308,10 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 		contentType = types.ContentTypeYAML
 	}
 
-	i.demoDropAll()
+	//	TODO: uncomment this when firewall is fixed
+	//i.demoDropAll()
 
-	fmt.Println("\n\nSTOP.")
+	fmt.Println("STOP.")
 	text2 := ""
 	fmt.Scanln(&text2)
 	fmt.Println("Resuming...")
