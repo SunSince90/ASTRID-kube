@@ -107,8 +107,21 @@ func DemoFakeDropAll(ips []string) {
 			if err != nil {
 				log.Errorln("Error while trying to send request:", err)
 			}
-			log.Infoln("Pushed rule in", ip)
 		}
+	}
+
+	apply := func(ip string) {
+		endPoint := "http://" + ip + ":9000/polycube/v1/firewall/fw/chain/ingress/apply-rules/"
+		req, err := http.NewRequest("POST", endPoint, nil)
+		req.Header.Set("Content-Type", "application/json")
+		client := &http.Client{}
+
+		_, err = client.Do(req)
+		if err != nil {
+			log.Errorln("Error while trying to apply rules:", err)
+		}
+
+		log.Infoln("Applied drop all rule for", ip)
 	}
 
 	for _, currentIP := range ips {
@@ -117,5 +130,7 @@ func DemoFakeDropAll(ips []string) {
 				push(currentIP, target)
 			}
 		}
+
+		apply(currentIP)
 	}
 }
