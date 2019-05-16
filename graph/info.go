@@ -347,7 +347,7 @@ func (i *InfrastructureInfoBuilder) demoDropAll() {
 func (i *InfrastructureInfoBuilder) forward(body io.ReadCloser) {
 	data, err := ioutil.ReadAll(body)
 	if err != nil {
-		log.Println("Error in decodidata")
+		log.Println("Error in decoding data")
 	}
 
 	endPoint := "http://localhost:8083"

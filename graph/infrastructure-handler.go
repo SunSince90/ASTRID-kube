@@ -230,10 +230,10 @@ func (handler *InfrastructureHandler) setupFirewall(pod *core_v1.Pod, dep *count
 	handler.log.Infoln("Created firewall for pod:", name)
 
 	//	TODO: uncomment this when firewall is fixed
-	/*if !utils.AttachFirewall(ip) {
+	if !utils.AttachFirewall(ip) {
 		return
 	}
-	handler.log.Infoln("Attached firewall to pod:", name)*/
+	handler.log.Infoln("Attached firewall to pod:", name)
 
 	//	TODO: look into name as uid
 	handler.infoBuilder.PushInstance(service, ip, name)
