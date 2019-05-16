@@ -310,8 +310,7 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 		contentType = types.ContentTypeYAML
 	}
 
-	//	TODO: uncomment this when firewall is fixed
-	//i.demoDropAll()
+	i.demoDropAll()
 
 	fmt.Println("STOP.")
 	text2 := ""
