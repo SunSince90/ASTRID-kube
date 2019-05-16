@@ -94,8 +94,8 @@ func DemoFakeDropAll(ips map[string]string) {
 		endPoint := "http://" + ip + ":9000/polycube/v1/firewall/fw/chain/ingress/append/"
 		rule := k8sfirewall.ChainRule{
 			Action: "drop",
-			Src:    ip,
-			Dst:    target,
+			Src:    target,
+			Dst:    ip,
 		}
 		data, err := marshal(rule)
 		if err == nil {
