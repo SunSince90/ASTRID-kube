@@ -260,6 +260,7 @@ func (handler *InfrastructureHandler) canBuildInfo() {
 	}
 
 	handler.initialized = true
+	handler.infoBuilder.DemoDropAll()
 	handler.log.Infoln("The graph is fully running. Building Infrastructure Info...")
 	handler.infoBuilder.ToggleSending()
 }

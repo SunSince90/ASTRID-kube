@@ -33,6 +33,7 @@ type InfrastructureInfo interface {
 	PopInstance(string)
 	ToggleSending()
 	Build(types.EncodingType)
+	DemoDropAll()
 }
 
 type InfrastructureInfoBuilder struct {
@@ -310,12 +311,10 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 		contentType = types.ContentTypeYAML
 	}
 
-	i.demoDropAll()
-
-	fmt.Println("STOP.")
+	fmt.Println("\t\t\t--- STOP ---")
 	text2 := ""
 	fmt.Scanln(&text2)
-	fmt.Println("Resuming...")
+	fmt.Println("\t\t\t--- Resuming... ---")
 
 	//	TODO: change these in a better format
 	req, err := http.NewRequest("POST", endPoint, bytes.NewBuffer(data))
@@ -333,7 +332,7 @@ func (i *InfrastructureInfoBuilder) send(to types.EncodingType) {
 	i.forward(resp.Body)
 }
 
-func (i *InfrastructureInfoBuilder) demoDropAll() {
+func (i *InfrastructureInfoBuilder) DemoDropAll() {
 	ips := map[string]string{}
 
 	for name, instance := range i.deployedInstances {
