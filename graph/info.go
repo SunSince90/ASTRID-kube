@@ -196,6 +196,8 @@ func (i *InfrastructureInfoBuilder) PopInstance(uid string) {
 }
 
 func (i *InfrastructureInfoBuilder) EnableSending() {
+	i.lock.Lock()
+	defer i.lock.Unlock()
 	i.sendingMode = "infrastructure-info"
 
 	//	Send immediately
