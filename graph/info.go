@@ -206,20 +206,8 @@ func (i *InfrastructureInfoBuilder) EnableSending() {
 	defer i.lock.Unlock()
 	i.sendingMode = "infrastructure-info"
 
-	//i.demoDropAll()
-
 	//	Send immediately
 	i.send()
-}
-
-func (i *InfrastructureInfoBuilder) demoDropAll() {
-	ips := map[string]string{}
-
-	for name, instance := range i.deployedInstances {
-		ips[instance.value] = name
-	}
-
-	utils.DemoFakeDropAll(ips)
 }
 
 func (i *InfrastructureInfoBuilder) generate() ([]byte, string, error) {
@@ -297,7 +285,7 @@ func (i *InfrastructureInfoBuilder) forward(body io.ReadCloser) {
 	if err != nil {
 		log.Errorln("Error in decoding data")
 	}
-	endPoint := settings.Settings.EndPoints.FakeCB.Configuration
+	endPoint := settings.Settings.EndPoints.CB.Configuration
 	req, err := http.NewRequest("POST", endPoint, bytes.NewBuffer(data))
 	req.Header.Set("Content-Type", "application/xml")
 	client := &http.Client{}
